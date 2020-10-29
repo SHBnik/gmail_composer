@@ -63,6 +63,9 @@ class Gmail_server:
         text = message.as_string()
         try:
             self.server.sendmail(FROM, TO, text)
-            print ('successfully sent the mail')
+            print ('successfully sent the mail to %s'%recipient)
+            return True
         except Exception as e:
-            print ("failed to send mail",e)
+            print("failed to send mail to %s"%recipient)
+            print(e)
+            return False

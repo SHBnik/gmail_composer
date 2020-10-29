@@ -6,19 +6,25 @@ from gmail_server import Gmail_server
 from google_sheet import Google_sheet
 from passwords import  privacy
 from shahab_template import template
+import sys
+
+
+Test = False
+
+if len(sys.argv) > 1:
+    for arg in sys.argv:
+        if arg == '-t':
+            Test = True
+            print('in test mode')
 
 
 
 
-
-
-
-Test = True
 
 
 if Test:
     workbook_name = 'PythonTest'
-    mail_each_day = 150
+    mail_each_day = 3
 else:
     workbook_name = 'Python_Apply_2021'
     mail_each_day = 150
@@ -46,12 +52,11 @@ def mail_composer():
     gmail = Gmail_server(_privacy.my_email(),_privacy.my_email_app_pass())
     today = date.today()
     print('sending the mails ...')
-    for name,prof_email in zip(profs_name,emails):
-        gmail.send_email(prof_email,_template.my_template_subject(),_template.my_template_body(name),base_dir,_template.cv_file_name())
-    print('emails sent successfully')
-    print('filling google sheet')
-    sheet.fill_rows(new_mail_start_row,len(profs_name),my_col,today.strftime("%d/%m/%Y"))
-    print('google sheet filled successfully')
+    for row,(name,prof_email) in enumerate(zip(profs_name,emails)):
+        result = gmail.send_email(prof_email,_template.my_template_subject(),_template.my_template_body(name),base_dir,_template.cv_file_name())
+        if result: data = today.strftime("%d/%m/%Y")
+        else: data = '!Fail!' 
+        sheet.fill_row(( new_mail_start_row + row + 1 ),my_col,data)
     gmail.close_email_server()
     print('Done today !')
     print('Time elapsed -> %d minute(s)'%((time.time()-old_time)/60))

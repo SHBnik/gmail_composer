@@ -67,22 +67,16 @@ class Google_sheet:
                         new_emails.append(all_email_list[i])
 
         return new_profs_name,new_emails,new_mail_start_cell
+        
 
-
-    def fill_rows(self,start_row,lenth_row,my_col,date):
-        if lenth_row == 0:
-            print('!!! No new names and emails to send !!!')
-        else:
-            for i in range(lenth_row):
-                row_index = start_row + i + 1
+    def fill_row(self,row,my_col,data):
                 while True:
                     try:
-                        self.sheet_instance.update_cell(row_index, my_col, date)
-                        print('row %d fill -> ok'%(row_index))
+                        self.sheet_instance.update_cell(row, my_col, data)
+                        print('row %d fill -> ok'%(row))
                         break
                     except Exception as e:
-                        print('row %d fill -> fail'%(row_index))
+                        print('row %d fill -> fail'%(row))
                         print(e)
-                        print('row %d fill -> retry'%(row_index))
+                        print('row %d fill -> retry'%(row))
                         time.sleep(150)  
-        
