@@ -45,9 +45,13 @@ def mail_composer():
     profs_name,emails,new_mail_start_row = sheet.get_new_rows(my_col,prof_name_col,email_col,mail_each_day)
     gmail = Gmail_server(_privacy.my_email(),_privacy.my_email_app_pass())
     today = date.today()
+    print('sending the mails ...')
     for name,prof_email in zip(profs_name,emails):
         gmail.send_email(prof_email,_template.my_template_subject(),_template.my_template_body(name),base_dir,_template.cv_file_name())
+    print('emails sent successfully')
+    print('filling google sheet')
     sheet.fill_rows(new_mail_start_row,len(profs_name),my_col,today.strftime("%d/%m/%Y"))
+    print('google sheet filled successfully')
     gmail.close_email_server()
     print('Done today !')
     print('Time elapsed -> %d minute(s)'%((time.time()-old_time)/60))
