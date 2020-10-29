@@ -2,4 +2,5 @@ passwords.py
 shahab_template.py
 ShahabNikkhoo_CV.pdf
 apply2021Python-359466d95fc2.json
-
+__pycache__/
+*.py[cod]
