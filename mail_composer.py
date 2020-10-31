@@ -83,7 +83,7 @@ if __name__ == "__main__":
 
 
     if Test:
-        schedule.every(1).minutes.do(mail_composer)
+        schedule.every(1).minutes.do(mail_composer,0)
     else:
         # US
         schedule.every().monday.at(US_mail_sender_time).do(mail_composer,0)
