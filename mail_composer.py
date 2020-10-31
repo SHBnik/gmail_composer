@@ -29,13 +29,15 @@ else:
     workbook_name = 'Python_Apply_2021'
     mail_each_day = 150
 
-sheet_index = 0
+US_sheet_index = 0
+CA_sheet_index = 1
 my_col = 3
 prof_name_col = 1
 email_col = 2 
     
 
-mail_sender_time = '18:30' # tehran_timezone
+US_mail_sender_time = '18:30' # tehran_timezone
+CA_mail_sender_time = '17:30' # tehran_timezone
 
 
 
@@ -43,9 +45,8 @@ mail_sender_time = '18:30' # tehran_timezone
 
 
 
-
-
-def mail_composer():
+def mail_composer(sheet_index):
+    print('starting the emails in sheet -> %d'%sheet_index)
     old_time = time.time()
     sheet = Google_sheet(_privacy.jason_cret_filename(),workbook_name,sheet_index,base_dir)
     profs_name,emails,new_mail_start_row = sheet.get_new_rows(my_col,prof_name_col,email_col,mail_each_day)
@@ -53,12 +54,12 @@ def mail_composer():
     today = date.today()
     print('sending the mails ...')
     for row,(name,prof_email) in enumerate(zip(profs_name,emails)):
-        result = gmail.send_email(prof_email,_template.my_template_subject(),_template.my_template_body(name),base_dir,_template.cv_file_name())
+        result = gmail.send_email(prof_email,_template.my_template_subject(sheet_index),_template.my_template_body(name),base_dir,_template.cv_file_name())
         if result: data = today.strftime("%d/%m/%Y")
         else: data = '!Fail!' 
         sheet.fill_row(( new_mail_start_row + row + 1 ),my_col,data)
     gmail.close_email_server()
-    print('Done today !')
+    print('Done today for sheet -> %d!'%sheet_index)
     print('Time elapsed -> %d minute(s)'%((time.time()-old_time)/60))
 
 
@@ -66,13 +67,14 @@ def mail_composer():
 
 
 
-''' test '''
+
 
 
 if __name__ == "__main__":
 
     print('Start')
-    print('waiting for %s oclock'%mail_sender_time)
+    print('waiting for %s oclock for US'%US_mail_sender_time)
+    print('waiting for %s oclock for CA'%CA_mail_sender_time)
 
     base_dir = os.path.dirname(os.path.realpath(__file__))
 
@@ -83,11 +85,19 @@ if __name__ == "__main__":
     if Test:
         schedule.every(1).minutes.do(mail_composer)
     else:
-        schedule.every().monday.at(mail_sender_time).do(mail_composer)
-        schedule.every().tuesday.at(mail_sender_time).do(mail_composer)
-        schedule.every().wednesday.at(mail_sender_time).do(mail_composer)
-        schedule.every().thursday.at(mail_sender_time).do(mail_composer)
-        schedule.every().friday.at(mail_sender_time).do(mail_composer)
+        # US
+        schedule.every().monday.at(US_mail_sender_time).do(mail_composer,0)
+        schedule.every().tuesday.at(US_mail_sender_time).do(mail_composer,0)
+        schedule.every().wednesday.at(US_mail_sender_time).do(mail_composer,0)
+        schedule.every().thursday.at(US_mail_sender_time).do(mail_composer,0)
+        schedule.every().friday.at(US_mail_sender_time).do(mail_composer,0)
+        
+        # CA
+        schedule.every().monday.at(CA_mail_sender_time).do(mail_composer,1)
+        schedule.every().tuesday.at(CA_mail_sender_time).do(mail_composer,1)
+        schedule.every().wednesday.at(CA_mail_sender_time).do(mail_composer,1)
+        schedule.every().thursday.at(CA_mail_sender_time).do(mail_composer,1)
+        schedule.every().friday.at(CA_mail_sender_time).do(mail_composer,1)
 
     while True:
         schedule.run_pending()
