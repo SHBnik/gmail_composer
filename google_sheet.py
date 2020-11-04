@@ -20,6 +20,20 @@ class Google_sheet:
 
 
 
+
+    def get_col(self,col):
+        while True:
+            try:
+                _list = self.sheet_instance.col_values(col)
+                print('list read -> ok')
+                break
+            except:
+                print('list read -> fail')
+                print('list read -> retry')
+                time.sleep(150)
+        return _list
+
+
     def get_new_rows(self,my_col,profs_name_col,emails_col,mail_each_day):
         
         while True:
