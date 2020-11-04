@@ -44,7 +44,7 @@ def check_duplicate(sheet_index):
             if i == j:
                 break
             else:
-                if first_email == second_emial:
+                if first_email == second_emial and first_email != '':
                     sheet.fill_row(j+1,res_col,'duplicate')
                     number += 1 
     print(number)
