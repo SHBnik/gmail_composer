@@ -19,13 +19,13 @@ this is my email for first sheet.
 
 
         ###                        for second sheet                      ####
-        self._my_template_subject.append('my email subject for second sheet')
-        self._my_template_body.append(
-            '''
-Dear Professor {pn},
+#         self._my_template_subject.append('my email subject for second sheet')
+#         self._my_template_body.append(
+#             '''
+# Dear Professor {pn},
         
-this is my email for second sheet.
-            ''')
+# this is my email for second sheet.
+#             ''')
         ####                               end                           ####
 
 
