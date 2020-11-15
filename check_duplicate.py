@@ -5,13 +5,33 @@ import sys
 
 
 Test = False
+workbook_name = ''
+res_col = 6
+email_col = 2 
+
 
 if len(sys.argv) > 1:
-    for arg in sys.argv:
-        if arg == '-t':
+    for i in range(sys.argv):
+        if sys.argv[i] == '-t':
             Test = True
             print('in test mode')
 
+        if sys.argv[i] == '--sheet-number':
+            sheet_number = int(sys.argv[i+1])
+            print('there is %d sheet'%sheet_number)
+        
+        if sys.argv[i] == '--sheet-name':
+            workbook_name = str(sys.argv[i+1])
+            print('the sheet name is %s'%workbook_name)
+
+        if sys.argv[i] == '--email-col':
+            email_col = int(sys.argv[i+1])
+            print('email column changed to -> %d'%email_col)
+        
+        
+        if sys.argv[i] == '--res-col':
+            res_col = int(sys.argv[i+1])
+            print('result column change to -> %d'%res_col)
 
 
 
@@ -19,13 +39,7 @@ if len(sys.argv) > 1:
 
 if Test:
     workbook_name = 'PythonTest'
-else:
-    workbook_name = 'Python_Apply_2021'
 
-US_sheet_index = 0
-CA_sheet_index = 1
-res_col = 6
-email_col = 2 
     
 
 
@@ -70,7 +84,7 @@ if __name__ == "__main__":
     if Test:
         check_duplicate(0)
     else:
-        check_duplicate(US_sheet_index)
-        check_duplicate(CA_sheet_index)
+        for i in sheet_number:
+            check_duplicate(i)
 
         

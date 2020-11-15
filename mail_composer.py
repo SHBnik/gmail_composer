@@ -10,12 +10,48 @@ import sys
 
 
 Test = False
+sheet_number = 1
+mail_sender_time = []
+workbook_name = ''
+mail_each_day = 100
+my_col = 3
+prof_name_col = 1
+email_col = 2 
 
 if len(sys.argv) > 1:
-    for arg in sys.argv:
-        if arg == '-t':
+    for i in range(sys.argv):
+        if sys.argv[i] == '-t':
             Test = True
             print('in test mode')
+            
+        if sys.argv[i] == '--sheet-number':
+            sheet_number = int(sys.argv[i+1])
+            print('there is %d sheet'%sheet_number)
+        
+        if sys.argv[i] == '--email-time':
+            mail_sender_time = str(sys.argv[i+1]).split(',')
+            for i,time in enumerate(mail_sender_time): 
+                print('send email in sheet %d at %s'%(sheet_number,mail_sender_time)) 
+
+        if sys.argv[i] == '--sheet-name':
+            workbook_name = str(sys.argv[i+1])
+            print('the sheet name is %s'%workbook_name)
+
+        if sys.argv[i] == '--email-number':
+            mail_each_day = int(sys.argv[i+1])
+            print('sending %d email each day'%mail_each_day)
+        
+        if sys.argv[i] == '--email-col':
+            email_col = int(sys.argv[i+1])
+            print('email column changed to -> %d'%email_col)
+        
+        if sys.argv[i] == '--prof-col':
+            prof_name_col = int(sys.argv[i+1])
+            print('professor name column changed to -> %d'%prof_name_col)
+        
+        if sys.argv[i] == '--my-col':
+            my_col = int(sys.argv[i+1])
+            print('your column change to -> %d'%my_col)
 
 
 
@@ -25,19 +61,6 @@ if len(sys.argv) > 1:
 if Test:
     workbook_name = 'PythonTest'
     mail_each_day = 3
-else:
-    workbook_name = 'Python_Apply_2021'
-    mail_each_day = 150
-
-US_sheet_index = 0
-CA_sheet_index = 1
-my_col = 3
-prof_name_col = 1
-email_col = 2 
-    
-
-US_mail_sender_time = '18:30' # tehran_timezone
-CA_mail_sender_time = '17:30' # tehran_timezone
 
 
 
@@ -54,8 +77,8 @@ def mail_composer(sheet_index):
     today = date.today()
     print('sending the mails ...')
     for row,(name,prof_email) in enumerate(zip(profs_name,emails)):
-        result = gmail.send_email(prof_email,_template.my_template_subject(sheet_index),_template.my_template_body(name),base_dir,_template.cv_file_name())
-        if result: data = today.strftime("%d/%m/%Y")
+        result = gmail.send_email(prof_email,_template.my_template_subject(sheet_index),_template.my_template_body(name,sheet_index),base_dir,_template.cv_file_name())
+        if result: data = today.strftime("%m/%d/%Y")
         else: data = '!Fail!' 
         sheet.fill_row(( new_mail_start_row + row + 1 ),my_col,data)
     gmail.close_email_server()
@@ -73,8 +96,6 @@ def mail_composer(sheet_index):
 if __name__ == "__main__":
 
     print('Start')
-    print('waiting for %s oclock for US'%US_mail_sender_time)
-    print('waiting for %s oclock for CA'%CA_mail_sender_time)
 
     base_dir = os.path.dirname(os.path.realpath(__file__))
 
@@ -85,20 +106,14 @@ if __name__ == "__main__":
     if Test:
         schedule.every(1).minutes.do(mail_composer,0)
     else:
-        # US
-        schedule.every().monday.at(US_mail_sender_time).do(mail_composer,0)
-        schedule.every().tuesday.at(US_mail_sender_time).do(mail_composer,0)
-        schedule.every().wednesday.at(US_mail_sender_time).do(mail_composer,0)
-        schedule.every().thursday.at(US_mail_sender_time).do(mail_composer,0)
-        schedule.every().friday.at(US_mail_sender_time).do(mail_composer,0)
-        
-        # CA
-        schedule.every().monday.at(CA_mail_sender_time).do(mail_composer,1)
-        schedule.every().tuesday.at(CA_mail_sender_time).do(mail_composer,1)
-        schedule.every().wednesday.at(CA_mail_sender_time).do(mail_composer,1)
-        schedule.every().thursday.at(CA_mail_sender_time).do(mail_composer,1)
-        schedule.every().friday.at(CA_mail_sender_time).do(mail_composer,1)
 
+        for i,number in enumerate(sheet_number):
+            schedule.every().monday.at(mail_sender_time[i]).do(mail_composer,i)
+            schedule.every().tuesday.at(mail_sender_time[i]).do(mail_composer,i)
+            schedule.every().wednesday.at(mail_sender_time[i]).do(mail_composer,i)
+            schedule.every().thursday.at(mail_sender_time[i]).do(mail_composer,i)
+            schedule.every().friday.at(mail_sender_time[i]).do(mail_composer,i)
+            
     while True:
         schedule.run_pending()
         time.sleep(1)
