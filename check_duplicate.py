@@ -11,7 +11,7 @@ email_col = 2
 
 
 if len(sys.argv) > 1:
-    for i in range(sys.argv):
+    for i in range(len(sys.argv)):
         if sys.argv[i] == '-t':
             Test = True
             print('in test mode')

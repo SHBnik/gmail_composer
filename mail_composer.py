@@ -4,8 +4,8 @@ import schedule
 from datetime import date
 from gmail_server import Gmail_server
 from google_sheet import Google_sheet
-from passwords import  privacy
-from shahab_template import template
+from xxx_passwords import  privacy
+from xxx_template import template
 import sys
 
 
@@ -19,7 +19,7 @@ prof_name_col = 1
 email_col = 2 
 
 if len(sys.argv) > 1:
-    for i in range(sys.argv):
+    for i in range(len(sys.argv)):
         if sys.argv[i] == '-t':
             Test = True
             print('in test mode')
@@ -30,8 +30,8 @@ if len(sys.argv) > 1:
         
         if sys.argv[i] == '--email-time':
             mail_sender_time = str(sys.argv[i+1]).split(',')
-            for i,time in enumerate(mail_sender_time): 
-                print('send email in sheet %d at %s'%(sheet_number,mail_sender_time)) 
+            for i,_time in enumerate(mail_sender_time): 
+                print('send email in sheet %d at %s'%(i,_time)) 
 
         if sys.argv[i] == '--sheet-name':
             workbook_name = str(sys.argv[i+1])

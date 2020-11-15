@@ -1,5 +1,6 @@
 class template:
     def __init__(self):
+        raise NameError('edit xxx_template.py file')   # delete or comment this line after you edited this file
         self._cv_file_name = 'my cv name.pdf'
         self._my_template_subject = []
         self._my_template_body = []
