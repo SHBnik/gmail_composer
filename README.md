@@ -68,7 +68,7 @@ if you want to send a template to all sheets just fill the first append.
 call the`mail_composer.py`
 a sample command is like this :
 ```bash
-python mail_composer.py --sheet-number 2  --email-time 18.30,17.30 --sheet-name mysheet  --email-number 150 --prof-col 1 --email-col 2 --my-col 3
+python mail_composer.py --sheet-number 2  --email-time 18:30,17:30 --sheet-name mysheet  --email-number 150 --prof-col 1 --email-col 2 --my-col 3
 ```
 - `--sheet-number`
 the number of sheets you have in a workbook
