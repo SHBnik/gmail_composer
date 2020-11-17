@@ -1,6 +1,6 @@
 import os
 from google_sheet import Google_sheet
-from xxx_passwords import  privacy
+from passwords import  privacy
 import sys
 
 

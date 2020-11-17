@@ -112,7 +112,7 @@ if __name__ == "__main__":
         schedule.every(1).minutes.do(mail_composer,0)
     else:
 
-        for i,number in enumerate(sheet_number):
+        for i in range(sheet_number):
             schedule.every().monday.at(mail_sender_time[i]).do(mail_composer,i)
             schedule.every().tuesday.at(mail_sender_time[i]).do(mail_composer,i)
             schedule.every().wednesday.at(mail_sender_time[i]).do(mail_composer,i)
