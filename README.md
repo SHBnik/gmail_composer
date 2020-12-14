@@ -68,14 +68,14 @@ if you want to send a template to all sheets just fill the first append.
 call the`mail_composer.py`
 a sample command is like this :
 ```bash
-python mail_composer.py --sheet-number 2  --email-time 18:30,17:30 --sheet-name mysheet  --email-number 150 --prof-col 1 --email-col 2 --my-col 3
+python mail_composer.py --sheet-number 2  --email-time 18:30,17:30 --workbook-name mysheet  --email-number 150 --prof-col 1 --email-col 2 --log-col 4 --paper-col 3
 ```
 - `--sheet-number`
 the number of sheets you have in a workbook
 - `--email-time`
 time in your os time zone that you want to the code send the emails.
 you can have a specific time for each sheet. split for every sheet by using`,`
-- `--sheet-name`
+- `--workbook-name`
 the workbook name that you added the google API email as an editor to it.
 - `--email-number`
 the number of emails that will send every day.
@@ -83,5 +83,7 @@ the number of emails that will send every day.
 the column of professors name that will be inserted in the template
 - `--email-col`
 the column of the emails according to the professor's name 
-- `--my-col`
+- `--log-col`
 the column that fills with the date of the mail sent
+- `--paper-col`
+the column that fills with the related papers of the mail sent

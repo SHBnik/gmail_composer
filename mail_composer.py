@@ -4,7 +4,7 @@ import schedule
 from datetime import date
 from gmail_server import Gmail_server
 from google_sheet import Google_sheet
-from xxx_passwords import  privacy
+from passwords import  privacy
 from xxx_template import template
 import sys
 
@@ -14,10 +14,15 @@ sheet_number = 1
 mail_sender_time = []
 workbook_name = ''
 mail_each_day = 100
-my_col = 3
+log_col = 3
 prof_name_col = 1
 email_col = 2 
+paper_col = 0
 vital_info = 0
+
+
+
+
 
 
 
@@ -30,15 +35,18 @@ def mail_composer(sheet_index):
     print('starting the emails in sheet -> %d'%sheet_index)
     old_time = time.time()
     sheet = Google_sheet(_privacy.jason_cret_filename(),workbook_name,sheet_index,base_dir)
-    profs_name,emails,new_mail_start_row = sheet.get_new_rows(my_col,prof_name_col,email_col,mail_each_day)
+    profs_name,emails,papers,new_mail_start_row = sheet.get_new_rows(log_col,prof_name_col,email_col,mail_each_day,paper_col)
     gmail = Gmail_server(_privacy.my_email(),_privacy.my_email_app_pass())
     today = date.today()
     print('sending the mails ...')
-    for row,(name,prof_email) in enumerate(zip(profs_name,emails)):
-        result = gmail.send_email(prof_email,_template.my_template_subject(sheet_index),_template.my_template_body(name,sheet_index),base_dir,_template.cv_file_name())
+    for row,(name,prof_email,paper) in enumerate(zip(profs_name,emails,papers)):
+        if name == '':
+            result = False
+        else:
+            result = gmail.send_email(prof_email,_template.my_template_subject(sheet_index),_template.my_template_body(name,paper,sheet_index),base_dir,_template.cv_file_name())
         if result: data = today.strftime("%m/%d/%Y")
         else: data = '!Fail!' 
-        sheet.fill_row(( new_mail_start_row + row + 1 ),my_col,data)
+        sheet.fill_row(( new_mail_start_row + row + 1 ),log_col,data)
     gmail.close_email_server()
     print('Done today for sheet -> %d!'%sheet_index)
     print('Time elapsed -> %d minute(s)'%((time.time()-old_time)/60))
@@ -73,7 +81,7 @@ if __name__ == "__main__":
                 for i,_time in enumerate(mail_sender_time): 
                     print('send email in sheet %d at %s'%(i,_time)) 
 
-            if sys.argv[i] == '--sheet-name':
+            if sys.argv[i] == '--workbook-name':
                 workbook_name = str(sys.argv[i+1])
                 vital_info += 1
                 print('the sheet name is %s'%workbook_name)
@@ -90,9 +98,14 @@ if __name__ == "__main__":
                 prof_name_col = int(sys.argv[i+1])
                 print('professor name column changed to -> %d'%prof_name_col)
             
-            if sys.argv[i] == '--my-col':
-                my_col = int(sys.argv[i+1])
-                print('your column change to -> %d'%my_col)
+            if sys.argv[i] == '--log-col':
+                log_col = int(sys.argv[i+1])
+                print('log column change to -> %d'%log_col)
+                
+            if sys.argv[i] == '--paper-col':
+                paper_col = int(sys.argv[i+1])
+                print('paper mode enabled!')
+                print('paper column is -> %d'%paper_col)
 
 
     if vital_info < 3:
@@ -100,7 +113,7 @@ if __name__ == "__main__":
 
     if Test:
         workbook_name = 'PythonTest'
-        mail_each_day = 3
+        mail_each_day = 10
 
     base_dir = os.path.dirname(os.path.realpath(__file__))
 
