@@ -27,8 +27,9 @@ class Google_sheet:
                 _list = self.sheet_instance.col_values(col)
                 print('list read -> ok')
                 break
-            except:
+            except Exception as e:
                 print('list read -> fail')
+                print(e)
                 print('list read -> retry')
                 time.sleep(150)
         return _list
@@ -41,8 +42,9 @@ class Google_sheet:
                 all_mail_sent_date_list = self.sheet_instance.col_values(my_col)
                 print('mail sent date list read -> ok')
                 break
-            except:
+            except Exception as e:
                 print('mail sent date list read -> fail')
+                print(e)
                 print('mail sent date list read -> retry')
                 time.sleep(150)
 
@@ -51,8 +53,9 @@ class Google_sheet:
                 all_profs_name_list = self.sheet_instance.col_values(profs_name_col)
                 print('profs name list read -> ok')
                 break
-            except:
+            except Exception as e:
                 print('profs name list read -> fail')
+                print(e)
                 print('profs name list read -> retry')
                 time.sleep(150)
                         
@@ -62,8 +65,9 @@ class Google_sheet:
                 all_email_list = self.sheet_instance.col_values(emails_col)
                 print('emails list read -> ok')
                 break
-            except:
+            except Exception as e:
                 print('emails list read -> fail')
+                print(e)
                 print('emails list read -> retry')
                 time.sleep(150)
 
@@ -73,8 +77,9 @@ class Google_sheet:
                     all_paper_list = self.sheet_instance.col_values(paper_col)
                     print('papers list read -> ok')
                     break
-                except:
+                except Exception as e:
                     print('papers list read -> fail')
+                    print(e)
                     print('papers list read -> retry')
                     time.sleep(150)
 

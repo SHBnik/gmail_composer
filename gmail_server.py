@@ -17,8 +17,9 @@ class Gmail_server:
                 self.user = user
                 print('gamil connection successful')
                 break
-            except:
+            except Exception as e:
                 print ("failed to intial")
+                print(e)
                 print('retry the connnection')
                 time.sleep(150)
 
